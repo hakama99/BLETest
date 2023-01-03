@@ -8,6 +8,13 @@
 
 import UIKit
 
+class GeneralCellData:NSObject{
+    @objc var title:String = ""
+    @objc var buttonTitle:String = ""
+    @objc var buttonImage:String = ""
+    @objc var key:String = ""
+}
+
 class GeneralCell: UITableViewCell {
     static let CELL_ID = "GeneralCell"
     @objc var label:UILabel!

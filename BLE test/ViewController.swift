@@ -27,6 +27,7 @@ class ViewController: UIViewController {
     @IBAction func scanClick(_ sender: Any) {
         tableData = []
         table.reloadData()
+        CBCManager.GetSingleInstance().del = self
         CBCManager.GetSingleInstance().stopScan()
         CBCManager.GetSingleInstance().startScan()
     }
@@ -60,9 +61,12 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        CBCManager.GetSingleInstance().stopScan()
         let data = tableData[indexPath.row]
-        CBCManager.GetSingleInstance().connect(device: data)
+        let story = UIStoryboard.init(name: "Main", bundle: nil)
+        if let controller = story.instantiateViewController(withIdentifier: TargetViewController.className) as? TargetViewController {
+            controller.device = data
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -76,7 +80,7 @@ extension ViewController:UITableViewDataSource,UITableViewDelegate{
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let data = tableData[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier:String.init(describing:  type(of: GeneralCell.self)), for: indexPath) as! GeneralCell
-        cell.label.text = "\(data.device_name ?? "")   \(data.uuid ?? "")"
+        cell.label.text = "\(data.mesh_name ?? "")   \(data.mac ?? "")"
         return cell
     }
     
